@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
         logo.crossOrigin = "Anonymous"; // Required for cross-origin images on canvas
 
         // Using a CORS proxy to ensure the image has the correct headers
-        const logoUrl = 'https://www.esensesoftware.com/images/default-source/style-library/logo-esense-white.png?sfvrsn=4';
+        const logoUrl = 'https://lh3.googleusercontent.com/p/AF1QipP9Vhru4PEjfOIZC6R38AP4OZfG5NzH8kTZEMHF=s1360-w1360-h1020-rw';
         const proxiedLogoUrl = `https://corsproxy.io/?${encodeURIComponent(logoUrl)}`;
         logo.src = proxiedLogoUrl;
 
