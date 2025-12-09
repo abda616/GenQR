@@ -11,14 +11,19 @@
 
     <div class="container">
         <h1>QR Code Generator</h1>
-        <p>Enter a URL or text to generate a QR code.</p>
+        <p>Enter a URL or text to generate a QR code, and upload a logo to be placed in the center.</p>
         <input type="text" id="qrText" placeholder="e.g., https://linkedin.com/in/aherbawi/" autocomplete="off">
+
+        <div class="file-input-container">
+            <label for="logoFile" class="file-label">Choose a logo</label>
+            <input type="file" id="logoFile" accept="image/*">
+        </div>
+
         <button id="generateBtn">Generate QR Code</button>
         <div id="qrCodeContainer" role="img" aria-label="QR Code will be displayed here"></div>
         <button id="downloadBtn" class="download-btn" hidden>Download QR Code</button>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
