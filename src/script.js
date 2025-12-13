@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const qrCodeContainer = document.getElementById('qrCodeContainer');
     const downloadBtn = document.getElementById('downloadBtn');
     const logoFileInput = document.getElementById('logoFile');
+    const clearLogoBtn = document.getElementById('clearLogoBtn');
 
     const generateQRCode = async () => {
         const url = qrTextInput.value.trim();
@@ -15,14 +16,11 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        if (!logoFile) {
-            alert("Please select a logo file.");
-            return;
-        }
-
         const formData = new FormData();
         formData.append('url', url);
-        formData.append('logo', logoFile);
+        if (logoFile) {
+            formData.append('logo', logoFile);
+        }
 
         try {
             const response = await fetch('http://localhost:8000/generate/', {
@@ -64,8 +62,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    const clearLogo = () => {
+        logoFileInput.value = '';
+        clearLogoBtn.hidden = true;
+    };
+
+    logoFileInput.addEventListener('change', () => {
+        if (logoFileInput.files.length > 0) {
+            clearLogoBtn.hidden = false;
+        } else {
+            clearLogoBtn.hidden = true;
+        }
+    });
+
     generateBtn.addEventListener('click', generateQRCode);
     downloadBtn.addEventListener('click', downloadQRCode);
+    clearLogoBtn.addEventListener('click', clearLogo);
 
     qrTextInput.addEventListener('keypress', (event) => {
         if (event.key === 'Enter') {

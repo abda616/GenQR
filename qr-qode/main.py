@@ -1,4 +1,5 @@
 from fastapi import FastAPI, File, UploadFile, Form
+from typing import Optional
 from fastapi.middleware.cors import CORSMiddleware
 import segno
 from io import BytesIO
@@ -27,18 +28,23 @@ app.add_middleware(
 SVG_NS = "http://www.w3.org/2000/svg"
 
 @app.post("/generate/")
-async def generate_qr_code(url: str = Form(...), logo: UploadFile = File(...)):
+async def generate_qr_code(url: str = Form(...), logo: Optional[UploadFile] = File(None)):
     """
-    Generates a QR code with a logo in the center, outputting a single SVG file.
+    Generates a QR code with an optional logo in the center, outputting a single SVG file.
     """
-    logo_bytes = await logo.read()
-
     try:
-        # 1. Generate the QR code as an SVG
+        # 1. Generate the base QR code as an SVG
         qr_svg_buffer = BytesIO()
         qrcode = segno.make(url, error='h')
         qrcode.save(qr_svg_buffer, kind='svg', scale=10, border=4)
         qr_svg_buffer.seek(0)
+
+        # If no logo is provided, return the plain SVG
+        if not logo:
+            return Response(content=qr_svg_buffer.read(), media_type="image/svg+xml")
+
+        # --- If a logo is provided, proceed with embedding it ---
+        logo_bytes = await logo.read()
 
         # 2. Parse the SVG XML
         ET.register_namespace("", SVG_NS)
@@ -64,7 +70,7 @@ async def generate_qr_code(url: str = Form(...), logo: UploadFile = File(...)):
         x_pos = (qr_width - logo_size) / 2
         y_pos = (qr_height - logo_size) / 2
 
-        # 5. Add a white background for the logo with the correct namespace
+        # 5. Add a white background for the logo
         bg_rect = ET.Element(f'{{{SVG_NS}}}rect', {
             'x': str(x_pos - 2),
             'y': str(y_pos - 2),
@@ -74,7 +80,7 @@ async def generate_qr_code(url: str = Form(...), logo: UploadFile = File(...)):
         })
         root.append(bg_rect)
 
-        # 6. Embed the logo as an <image> element with the correct namespace
+        # 6. Embed the logo as an <image> element
         image_element = ET.Element(f'{{{SVG_NS}}}image', {
             'x': str(x_pos),
             'y': str(y_pos),

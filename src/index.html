@@ -11,12 +11,13 @@
 
     <div class="container">
         <h1>QR Code Generator</h1>
-        <p>Enter a URL or text to generate a QR code, and upload a logo to be placed in the center.</p>
+        <p>Enter a URL to generate a QR code. You can also upload an optional logo to be placed in the center.</p>
         <input type="text" id="qrText" placeholder="e.g., https://linkedin.com/in/aherbawi/" autocomplete="off">
 
         <div class="file-input-container">
-            <label for="logoFile" class="file-label">Choose a logo</label>
+            <label for="logoFile" class="file-label">Choose a logo (optional)</label>
             <input type="file" id="logoFile" accept="image/*">
+            <button id="clearLogoBtn" class="clear-btn" hidden>Clear</button>
         </div>
 
         <button id="generateBtn">Generate QR Code</button>
