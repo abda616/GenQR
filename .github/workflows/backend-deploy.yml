@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      FUNCTION_APP_NAME: 'your-function-app-name' # <-- TODO: Replace with your Function App name
+      FUNCTION_APP_NAME: 'qr-link' # <-- TODO: Replace with your Function App name
       PYTHON_VERSION: '3.12'
 
     steps:
